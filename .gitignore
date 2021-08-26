@@ -1,0 +1,4 @@
+
+# Project exclude paths
+/dingtalk_robot_common/target/
+/dingtalk_robot_service/dingtalk_robot_service_sendWeatherMsg/target/
