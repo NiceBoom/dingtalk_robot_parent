@@ -80,6 +80,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.3.9" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.8.2" level="project" />
-    <orderEntry type="library" name="Maven: com.robot:common:0.0.1-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="dingtalk_robot_common" />
   </component>
 </module>
