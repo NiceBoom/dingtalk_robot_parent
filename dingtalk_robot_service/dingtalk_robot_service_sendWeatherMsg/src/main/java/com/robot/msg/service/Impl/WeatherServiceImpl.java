@@ -6,6 +6,8 @@ import com.robot.msg.service.WeatherService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,18 +24,20 @@ public class WeatherServiceImpl implements WeatherService {
      * @return
      */
     @Override
-    public Result refreshAllWeather(String city_id){
+    public Map<String, String> refreshAllWeather(String city_id){
         //拼接请求URL
         String cityUrl = WeatherServiceImpl.SOJSON_WEATHER_URL + city_id;
 
         try{
             //发送get请求并以String返回查询结果
             RestTemplate restTemplate = new RestTemplate();
-            WeatherResult weatherResult = restTemplate.getForObject(cityUrl, WeatherResult.class);
+            String weatherResult = restTemplate.getForObject(cityUrl, String.class);
 
             //TODO 保存刷新数据(存到mysql或者redis)
+            //获取当天时间yyyyMMddHH
+            String timeStamp = new SimpleDateFormat("yyyyMMddHH").format(Calendar.getInstance().getTime());
+            System.out.println(timeStamp );
 
-            System.out.println(weatherResult);
             System.out.println(weatherResult.toString());
             return new Result(true, StatusCode.OK, "获取成功", weatherResult);
         }catch(Exception e){
@@ -48,7 +52,7 @@ public class WeatherServiceImpl implements WeatherService {
      * @return
      */
     @Override
-    public Result getTodayWeather(String city_id){
+    public Map<String, String> getTodayWeather(String city_id){
         return getWeather(city_id, StatusCode.TODAY_WEATHER);
     }
 
@@ -58,7 +62,7 @@ public class WeatherServiceImpl implements WeatherService {
      * @return
      */
     @Override
-    public Result getTomorrowWeather(String city_id){
+    public Map<String, String> getTomorrowWeather(String city_id){
         return getWeather(city_id, StatusCode.TOMORROW_WEATHER);
     }
 
@@ -68,7 +72,7 @@ public class WeatherServiceImpl implements WeatherService {
      * @return
      */
     @Override
-    public Result getNowWeather(String city_id){
+    public Map<String, String> getNowWeather(String city_id){
         return getWeather(city_id, StatusCode.NOW_WEATHER);
     }
 
@@ -78,9 +82,11 @@ public class WeatherServiceImpl implements WeatherService {
      * @param weatherCode 日期代码
      * @return
      */
-    public Result getWeather(String city_id, Integer weatherCode){
+    public Map<String, String> getWeather(String city_id, Integer weatherCode){
         //拼接请求URL
         String cityUrl = WeatherServiceImpl.SOJSON_WEATHER_URL + city_id;
+        //错误结果
+        Map<String, String> errorResultMap = new HashMap<>();
 
         try{
             RestTemplate restTemplate = new RestTemplate();
@@ -139,19 +145,18 @@ public class WeatherServiceImpl implements WeatherService {
 
             if(weatherCode == StatusCode.TODAY_WEATHER)
                 //返回当天天气
-                return new Result(true, StatusCode.OK, "获取成功", todayWeatherMap);
+                return todayWeatherMap;
             if(weatherCode == StatusCode.TOMORROW_WEATHER)
                 //返回明天天气
-                return new Result(true, StatusCode.OK, "获取成功", tomorrowWeatherMap);
+                return tomorrowWeatherMap;
             if(weatherCode == StatusCode.NOW_WEATHER)
                 //返回当前天气
-                return new Result(true, StatusCode.OK, "获取成功", nowWeatherMap);
+                return nowWeatherMap;
 
-            return new Result(true, StatusCode.ERROR, "获取失败");
-
+            return errorResultMap;
         }catch(Exception e){
             System.out.println(e);
-            return new Result(false, StatusCode.ERROR, "获取失败");
+            return errorResultMap;
         }
         // TODO 从数据库获取天气
 

@@ -8,6 +8,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -22,19 +23,19 @@ public class MsgServiceImpl implements MsgService {
             "access_token=ffaabe93a835ff732b8053c0cd54c1e8315a8f906ddc0cc722dad5e833ff281c";
 
     @Override
-    public Result sendWeatherMsg(String city_id, Result weatherResult, Integer weatherCode){
+    public Map<String, String> sendWeatherMsg(String city_id, Map<String, String> weatherData, Integer weatherCode){
 
         //初始化变量
         String requestBody = "";
+
+        //初始化返回值
+        Map resultMap = new HashMap();
 
         //使用RestTemplate发送http请求
         RestTemplate restTemplate = new RestTemplate();
         //请求路径
         String url = MsgServiceImpl.DINGDINGTALK_ROBOT_URL +
                 MsgServiceImpl.DINGDINGTALK_ROBOT_URL_TOKEN;
-
-        //获取天气情况
-        Map<String, String> weatherData = (Map)weatherResult.getData();
 
         //今天天气消息模板
         if(weatherCode == StatusCode.TODAY_WEATHER) {
@@ -97,10 +98,12 @@ public class MsgServiceImpl implements MsgService {
             //解析返回数据
             JSONObject jsTemp = JSONObject.parseObject(responseEntity.getBody());
             System.out.println("这里是发送信息请求返回的消息"+jsTemp.toString());
-            return new Result<>(true, StatusCode.OK, "发送成功", jsTemp);
+            //TODO 提问返回值是什么类型，放什么参数
+            resultMap.put("true", jsTemp.toString());
+            return resultMap;
         }catch (Exception e){
             System.out.println(e);
-            return new Result<>(false, StatusCode.ERROR, "发送失败");
+            return resultMap;
         }
     }
 }

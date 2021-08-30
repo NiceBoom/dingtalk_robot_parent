@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/weather")
@@ -19,13 +21,12 @@ public class WeatherController {
     private WeatherService weatherService;
 
     //更新天气数据
-    //每天4点30、9点30、13点30、19点30更新天气缓存
-    @Scheduled(cron = "0 30 4,9,13,19 1/1 * ? ")
+    //每天4点0、9点0、13点0、19点更新天气缓存
+    @Scheduled(cron = "0 0 4,9,13,19 1/1 * ? ")
     void refreshAllWeather(){
-        Result result = weatherService.refreshAllWeather(WeatherController.CITY_KEY);
-        System.out.println(result.isFlag());
-
+        Map<String, String> result = weatherService.refreshAllWeather(WeatherController.CITY_KEY);
     }
 
+    //缓存天气数据
 
 }

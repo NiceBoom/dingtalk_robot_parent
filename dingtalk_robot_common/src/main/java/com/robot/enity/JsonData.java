@@ -2,6 +2,10 @@ package com.robot.enity;
 
 import java.util.List;
 
+/**
+ * 返回天气数据第二层DTO
+ */
+
 public class JsonData {
     private String shidu;//湿度
     private String pm25; //pm25

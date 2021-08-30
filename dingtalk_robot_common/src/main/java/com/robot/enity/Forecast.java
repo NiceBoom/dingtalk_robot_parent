@@ -1,5 +1,8 @@
 package com.robot.enity;
 
+/**
+ * 返回天气数据第三层DTO
+ */
 public class Forecast {
     private String date;//当天日期
     private String high;//最高气温

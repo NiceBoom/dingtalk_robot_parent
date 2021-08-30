@@ -3,6 +3,9 @@ package com.robot.enity;
 
 import java.util.List;
 
+/**
+ * 返回天气数据第一层DTO
+ */
 public class WeatherResult {
     private String date;//日期
     private String status;//状态码
