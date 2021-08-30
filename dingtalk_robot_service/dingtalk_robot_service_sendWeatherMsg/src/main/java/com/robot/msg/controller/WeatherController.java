@@ -26,4 +26,6 @@ public class WeatherController {
         System.out.println(result.isFlag());
 
     }
+
+
 }
