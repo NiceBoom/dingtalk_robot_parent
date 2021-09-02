@@ -1,10 +1,22 @@
 package com.robot.msg.service;
 
 import com.robot.enity.Result;
+import com.robot.msg.service.dto.GetTomorrowWeatherInputDto;
+import com.robot.msg.service.dto.GetTomorrowWeatherOutputDto;
 
 import java.util.Map;
 
+
+
+
 public interface WeatherService {
+
+    public class NotFoundError extends Exception {
+
+    }
+
+    GetTomorrowWeatherOutputDto getTomorrowWeather(GetTomorrowWeatherInputDto inputDto) throws NotFoundError;
+
     /**
      * 获取当天天气
      * @param city_id 城市id

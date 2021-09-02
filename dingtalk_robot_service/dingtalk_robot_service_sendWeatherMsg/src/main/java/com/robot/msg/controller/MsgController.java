@@ -60,8 +60,8 @@ public class MsgController {
         System.out.println(result2);
     }
 
-    //每天早上九点发送当前天气提醒
-    @Scheduled(cron = "0 0 9 * * ?")
+    //每天早上9.01发送当前天气提醒
+    @Scheduled(cron = "0 1 9 * * ? ")
     void sendTime900NowWeather(){
 
         //查询现在天气情况，返回Result结果
@@ -85,7 +85,7 @@ public class MsgController {
         //TODO 判断是否查询成功
         //发送今天天气消息
         Map<String, String> result = msgService.sendWeatherMsg(MsgController.CITYKEY, todayWeather, StatusCode.TODAY_WEATHER);
-        System.out.println("返回消息:" + result.getData().toString() );
+
     }
 
     //手动发送明天天气消息

@@ -3,14 +3,15 @@ package com.robot.msg.service.Impl;
 import com.alibaba.fastjson.JSON;
 import com.robot.enity.*;
 import com.robot.msg.service.WeatherService;
+import com.robot.msg.service.dto.GetTomorrowWeatherInputDto;
+import com.robot.msg.service.dto.GetTomorrowWeatherOutputDto;
+import com.robot.util.JedisUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import redis.clients.jedis.Jedis;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {
@@ -38,12 +39,24 @@ public class WeatherServiceImpl implements WeatherService {
             String timeStamp = new SimpleDateFormat("yyyyMMddHH").format(Calendar.getInstance().getTime());
             System.out.println(timeStamp );
 
+            Jedis jedisResource = JedisUtils.getResource();
+            jedisResource.set(timeStamp, weatherResult);
+
             System.out.println(weatherResult.toString());
             return new Result(true, StatusCode.OK, "获取成功", weatherResult);
         }catch(Exception e){
             System.out.println(e);
             return new Result(false, StatusCode.ERROR, "获取失败");
         }
+    }
+
+    @Override
+    public GetTomorrowWeatherOutputDto getTomorrowWeather(GetTomorrowWeatherInputDto inputDto) throws NotFoundError {
+
+        if ((new Random()).nextBoolean()) {
+            throw new WeatherService.NotFoundError();
+        }
+        return null;
     }
 
     /**
